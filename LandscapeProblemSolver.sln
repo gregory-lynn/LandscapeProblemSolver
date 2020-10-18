@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30611.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LandscapeProblemSolver", "LandscapeProblemSolver\LandscapeProblemSolver.csproj", "{C03173D0-9CCA-4B82-BE0C-B888BC90675F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LandscapeTests", "LandscapeTests\LandscapeTests.csproj", "{98C7F5CA-224D-4AE8-9D37-A1CF423014AD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C03173D0-9CCA-4B82-BE0C-B888BC90675F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C03173D0-9CCA-4B82-BE0C-B888BC90675F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C03173D0-9CCA-4B82-BE0C-B888BC90675F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C03173D0-9CCA-4B82-BE0C-B888BC90675F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98C7F5CA-224D-4AE8-9D37-A1CF423014AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98C7F5CA-224D-4AE8-9D37-A1CF423014AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98C7F5CA-224D-4AE8-9D37-A1CF423014AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98C7F5CA-224D-4AE8-9D37-A1CF423014AD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EA5A7EF3-68EA-47D2-A8BB-AAABBF5EB0A0}
+	EndGlobalSection
+EndGlobal
