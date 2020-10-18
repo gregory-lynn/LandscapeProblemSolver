@@ -6,6 +6,7 @@ using LandscapeTests.Models;
 using log4net;
 using System.Security.Cryptography;
 using System.Linq;
+using System;
 
 namespace LandscapeTests
 {
@@ -46,7 +47,7 @@ namespace LandscapeTests
                         log.Info(string.Format("Test object {0} had a different result from what was expected, check the test object config.", _object.Name));
                     }
                 }
-                catch
+                catch (Exception)
                 {
                     if (_object.ExpectedResult.Equals(false)) {
                         log.Info(string.Format("Test object {0} threw an exception but this may be expected, please verify the test config", _object.Name));

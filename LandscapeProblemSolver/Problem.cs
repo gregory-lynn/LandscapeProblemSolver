@@ -7,61 +7,57 @@ namespace LandscapeProblemSolver
 {
     public class Problem
     {
+
         public static int Solve(int[] heights)
         {
-            int maxHeight = 0;
-            int previousHeight = 0;
-            int previousHeightIndex = 0;
-            int coll = 0;
-            int temp = 0;
+            int left = 0;
+            int right = heights.Length - 1;
+            int ans = 0;
+            int leftMax = 0;
+            int rightMax = 0;
+
             List<int> tmpList = heights.ToList();
 
-            // let's throw an exception if the height or length exceeds 32000
-            var badInts = (from o in tmpList where o > 32000 select o).ToList();
-            if (badInts.Any() || heights.Length > 32000)
+            // let's throw an exception if:
+            // the height or length exceeds 32000 OR there are heights less than 0
+            //var badInts = (from o in tmpList where o > 32000 select o).ToList();
+            var query = tmpList.Where(c => c > 32000 || c < 0);
+            if (query.Any() || heights.Length > 32000)
             {
                 throw new IndexOutOfRangeException();
             }
 
-            // find the first peak (all water before will not be collected)
-            while (heights[previousHeightIndex] > maxHeight)
+            while (left < right)
             {
-                maxHeight = heights[previousHeightIndex];
-                previousHeightIndex++;
-                // in case of stairs (no water collected)
-                if (previousHeightIndex == heights.Length)            
-                    return coll;
-                else
-                    previousHeight = heights[previousHeightIndex];
-            }
-
-            for (int i = previousHeightIndex; i < heights.Length; i++)
-            {
-                if (heights[i] >= maxHeight)
-                {      // collect all temp water
-                    coll += temp;
-                    temp = 0;
-                    maxHeight = heights[i];        // new max height
-                }
-                else
+                if (heights[left] < heights[right])
                 {
-                    temp += maxHeight - heights[i];
-                    if (heights[i] > previousHeight)
-                    {  // we went up... collect some water
-                        int collWater = (i - previousHeightIndex) * (heights[i] - previousHeight);
-                        coll += collWater;
-                        temp -= collWater;
+                    //if height left < left max that means we can trap water
+                    if (heights[left] < leftMax)
+                    {
+                        ans += leftMax - heights[left];
                     }
+                    else // otherwise left max needs to be updated
+                    {
+                        leftMax = heights[left];
+                    }
+                    left++;
                 }
-
-                // previousHeight only changes if consecutive towers are not same height
-                if (heights[i] != previousHeight)
+                else
                 {
-                    previousHeight = heights[i];
-                    previousHeightIndex = i;
+                    if (heights[right] < rightMax)
+                    {
+                        ans += rightMax - heights[right];
+                    }
+                    else
+                    {
+                        rightMax = heights[right];
+                    }
+
+                    right--;
                 }
             }
-            return coll;
+            return ans;
         }
     }
 }
+
