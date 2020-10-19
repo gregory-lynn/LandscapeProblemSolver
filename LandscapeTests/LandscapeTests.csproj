@@ -31,12 +31,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="App_Data\Logs\" />
-    <Folder Include="Properties\" />
+    <ProjectReference Include="..\LandscapeProblemSolver\LandscapeProblemSolver.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LandscapeProblemSolver\LandscapeProblemSolver.csproj" />
+    <None Update="log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

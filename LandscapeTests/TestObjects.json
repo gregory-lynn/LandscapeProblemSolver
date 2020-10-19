@@ -7,11 +7,18 @@
     "values": [ 5, 2, 3, 4, 5, 4, 1, 3, 1 ]
   },
   {
-    "name": "Complex2",
-    "description": "testing online grid: https://craftdesignonline.com/pattern-grid/",
-    "expected_amount": "105",
-    "expected_result": "True",
-    "values": [ 11, 5, 17, 12, 5, 8, 6, 5, 5, 11, 7, 5, 3, 7, 8, 7, 4, 3, 13, 11 ]
+    "name": "NegativeTest",
+    "description": "A copy of SampleArray where we give the wrong amount to be expected",
+    "expected_amount": "10",
+    "expected_result": "False",
+    "values": [ 5, 2, 3, 4, 5, 4, 1, 3, 1 ]
+  },
+  {
+    "name": "ExceptionTest",
+    "description": "Let's see if we can cause an exception by sending NULL for values",
+    "expected_amount": "10",
+    "expected_result": "False",
+    "values": null
   },
   {
     "name": "ComplexArray",
@@ -19,6 +26,13 @@
     "expected_amount": "85",
     "expected_result": "True",
     "values": [ 10, 2, 5, 2, 3, 4, 5, 4, 1, 3, 1, 3, 2, 10 ]
+  },
+  {
+    "name": "Complex2",
+    "description": "testing online grid: https://craftdesignonline.com/pattern-grid/",
+    "expected_amount": "105",
+    "expected_result": "True",
+    "values": [ 11, 5, 17, 12, 5, 8, 6, 5, 5, 11, 7, 5, 3, 7, 8, 7, 4, 3, 13, 11 ]
   },
   {
     "name": "DownwardSlope",

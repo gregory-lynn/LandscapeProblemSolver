@@ -7,6 +7,7 @@ using log4net;
 using System.Security.Cryptography;
 using System.Linq;
 using System;
+using System.Diagnostics;
 
 namespace LandscapeTests
 {
@@ -22,12 +23,15 @@ namespace LandscapeTests
         [Fact]
         public void TestJsonObjects()
         {
+            log4net.Config.XmlConfigurator.Configure();
+
+            // Create a logger for use in this class
+            log4net.ILog log4 = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             _objects = _helper.TestObjectsList;
 
-            //// TODO: Either fix this code or get rid of it
-            //Models.TestObjects TestObject obj = (from p in _objects where p.Name.Equals("SampleArray") select p).FirstOrDefault();
-            //if (TestObject == null)
-            //Assert.Collection(_objects, item => Assert.Contains("SampleArray", item.Name));
+            Models.TestObjects TestObject = (from p in _objects where p.Name.Equals("SampleArray") select p).FirstOrDefault();
+            Assert.NotNull(TestObject);
+            
             
             foreach (TestObjects _object in _objects)
             {
@@ -36,24 +40,61 @@ namespace LandscapeTests
                     _waterCollected = Problem.Solve(_object.Data.ToArray());
 
                     // let's do some assertions based on our JSON object and log based on expected result
-                    Assert.True(_waterCollected.Equals(_object.ExpectedAmount));
+                    // these objects ExpectedAmount should match the water collected 
+                    if (Convert.ToBoolean(_object.ExpectedResult).Equals(true))
+                    {
+                        Assert.True(_waterCollected.ToString().Equals(_object.ExpectedAmount));
 
-                    if (!_waterCollected.Equals(_object.ExpectedAmount)) {
-                        log.Warn(string.Format("Test Object: {0} failed! Expected water collected {1} does not match actual value of {2}."
-                            , _object.Name, _object.ExpectedAmount, _waterCollected));
-                    } else if (_object.ExpectedResult.Equals(true)) {
-                        log.Info(string.Format("Test object {0} passed.... Congratulations!!", _object.Name));
-                    } else {
-                        log.Info(string.Format("Test object {0} had a different result from what was expected, check the test object config.", _object.Name));
+                        // Now let's do some logging to give more details in case it failed the assertion
+                        if (!_waterCollected.ToString().Equals(_object.ExpectedAmount))
+                        {
+                            log.Warn(string.Format("Test object {0} water collected <> ExpectedAmount and ExpectedResult = true: test failed since ExpectedAmount {1} does not match actual value of {2}."
+                            , _object.Name, _object.ExpectedAmount, _waterCollected.ToString()));
+                        } else
+                        {
+                            log.Info(string.Format("Test object {0} water collected = ExpectedAmount and ExpectedResult = true: test passed.", _object.Name));
+                        }
+                    }
+                    else if (Convert.ToBoolean(_object.ExpectedResult).Equals(false)) 
+                    {
+                        // These tests should fail or throw exceptions
+                        // Exceptions are caught elsewhere so if we make it here, assume the values should not match
+                        Assert.False(_waterCollected.ToString().Equals(_object.ExpectedAmount));
+                        if (!_waterCollected.ToString().Equals(_object.ExpectedAmount))
+                        {
+                            log.Info(string.Format("Test object {0} water collected <> ExpectedAmount and ExpectedResult = false: negative test passed.", _object.Name));
+                        }
+                            
                     }
                 }
-                catch (Exception)
+                catch(IndexOutOfRangeException e)
                 {
-                    if (_object.ExpectedResult.Equals(false)) {
-                        log.Info(string.Format("Test object {0} threw an exception but this may be expected, please verify the test config", _object.Name));
+                    if (Convert.ToBoolean(_object.ExpectedResult).Equals(false))
+                    {
+                        Assert.NotNull(_object); // just a simple assertion expected to pass
+                        // now we log more details about our expected out of range execption
+                        log.Info(string.Format("Test object {0} expected result: false; Test passed with OutOfRangeException: {1}", _object.Name, e.Message.ToString()));
                     }
                 }
-                
+                catch (Exception e)
+                {
+                    if (Convert.ToBoolean(_object.ExpectedResult).Equals(false)) {
+                        // only a negative test passing in null data should pass while throwing an exception
+                        Assert.Null(_object.Data);
+                        if (_object.Data == null)
+                        {
+                            log.Info(string.Format("Test object {0} expected result: false; Test passed with Exception: {1}", _object.Name, e.Message.ToString()));
+                        }
+                        else
+                        {
+                            log.Error(string.Format("Test object {0} expected result: false; Test failed with Exception: {1}", _object.Name, e.Message.ToString()));
+                        }
+                    } else {
+                        // unexpected exception let's make sure to fail the test and log it
+                        Assert.Equal("foo", "bar");
+                        log.Error(string.Format("Test object {0}: unexpected exception caught: {1}", _object.Name, e.Message.ToString()));
+                    }
+                }
             }
         }
 
@@ -61,11 +102,25 @@ namespace LandscapeTests
         public void RandomArrayTest()
         {
             _randomArray = _helper.RandomIntArray;
-            _waterCollected = Problem.Solve(_randomArray);
-
+            var timer = new Stopwatch();
+            timer.Start();
+            try
+            {
+                _waterCollected = Problem.Solve(_randomArray);
+            }
+            catch (Exception e)
+            {
+                // well this is unexpected, let's make sure our test fails in addition to logging more info
+                Assert.Equal("foo", "bar");
+                log.Error(string.Format("Test RandomArrayTest threw an unexpected exception: {0}", e.Message.ToString()));
+            }
+            timer.Stop();
+            // some simple assertions here since we have nothing to compare random numbers to
             Assert.IsType<int>(_waterCollected);
             Assert.True(_waterCollected > -1);
-
+            // now log how long it took, in case we are trying to make our problem solve method faster
+            log.Info(string.Format("Test RandomArrayTest completed in {0}ms.", 
+                timer.ElapsedMilliseconds.ToString()));
         }
     }
 }

@@ -7,57 +7,51 @@ namespace LandscapeProblemSolver
 {
     public class Problem
     {
-
         public static int Solve(int[] heights)
         {
-            int left = 0;
-            int right = heights.Length - 1;
-            int ans = 0;
-            int leftMax = 0;
-            int rightMax = 0;
-
             List<int> tmpList = heights.ToList();
-
+            int result = 0;
+            int leftSideMax = 0;
+            int rightSideMax = 0;
+            int lefthandside = 0;
+            int righthandside = heights.Length - 1;
             // let's throw an exception if:
             // the height or length exceeds 32000 OR there are heights less than 0
-            //var badInts = (from o in tmpList where o > 32000 select o).ToList();
             var query = tmpList.Where(c => c > 32000 || c < 0);
             if (query.Any() || heights.Length > 32000)
             {
                 throw new IndexOutOfRangeException();
             }
-
-            while (left < right)
+            while (lefthandside < righthandside)
             {
-                if (heights[left] < heights[right])
+                if (heights[lefthandside] < heights[righthandside])
                 {
-                    //if height left < left max that means we can trap water
-                    if (heights[left] < leftMax)
+                    //if height left < left side max that means we can trap water
+                    if (heights[lefthandside] < leftSideMax)
                     {
-                        ans += leftMax - heights[left];
+                        result += leftSideMax - heights[lefthandside];
                     }
-                    else // otherwise left max needs to be updated
+                    else // otherwise left side max needs to be updated
                     {
-                        leftMax = heights[left];
+                        leftSideMax = heights[lefthandside];
                     }
-                    left++;
+                    lefthandside++;
                 }
                 else
                 {
-                    if (heights[right] < rightMax)
+                    if (heights[righthandside] < rightSideMax)
                     {
-                        ans += rightMax - heights[right];
+                        result += rightSideMax - heights[righthandside];
                     }
                     else
                     {
-                        rightMax = heights[right];
+                        rightSideMax = heights[righthandside];
                     }
 
-                    right--;
+                    righthandside--;
                 }
             }
-            return ans;
+            return result;
         }
     }
 }
-
