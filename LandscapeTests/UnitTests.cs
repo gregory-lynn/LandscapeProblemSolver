@@ -1,10 +1,7 @@
 using Xunit;
 using LandscapeProblemSolver;
-using System.Runtime.InteropServices.ComTypes;
 using System.Collections.Generic;
 using LandscapeTests.Models;
-using log4net;
-using System.Security.Cryptography;
 using System.Linq;
 using System;
 using System.Diagnostics;
